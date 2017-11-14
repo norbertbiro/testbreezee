@@ -1,15 +1,28 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HelloWorld from '@/components/HelloWorld'
+import Detect from '@/detect/index.js'
 
 Vue.use(Router)
 
-export default new Router({
+console.log('Is mobile?', Detect.isMobile())
+
+const $router = new Router({
   routes: [
     {
       path: '/',
-      name: 'Hello',
-      component: HelloWorld
+      name: 'Dashboard',
+      component: Detect.isMobile()
+        ? () => import('@/layouts/DashboardMobile.vue')
+        : () => import('@/layouts/DashboardDesktop.vue')
+    },
+    {
+      path: '/notes',
+      name: 'Notes List',
+      component: Detect.isMobile()
+        ? () => import('@/layouts/NotesListMobile.vue')
+        : () => import('@/layouts/NotesListDesktop.vue')
     }
   ]
 })
+
+export default $router
